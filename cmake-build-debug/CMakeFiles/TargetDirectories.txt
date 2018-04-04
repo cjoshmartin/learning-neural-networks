@@ -1,0 +1,3 @@
+/Users/josh/Documents/School/Junior/spring/csci362/projects/learning-CNN/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/josh/Documents/School/Junior/spring/csci362/projects/learning-CNN/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/josh/Documents/School/Junior/spring/csci362/projects/learning-CNN/cmake-build-debug/CMakeFiles/learning_CNN.dir

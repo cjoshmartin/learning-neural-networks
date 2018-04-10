@@ -25,7 +25,7 @@ Neuron::Neuron(unsigned numOutputs, unsigned myIndex) : m_myIndex(myIndex) {
 }
 
 void Neuron::setOutputVal(double m_outputVal) {
-    Neuron::m_outputVal = m_outputVal;
+    this->m_outputVal = m_outputVal;
 }
 
 double Neuron::getOutputVal() const {
@@ -45,7 +45,7 @@ void Neuron::feedForward(const Layer &prevLayer) {
         double a = testing.getOutputVal();
         double b = testing.m_outputWeights[m_myIndex].weight;
 //        int b =0;
-//       sum += a * b;
+       sum += a * b;
     }
     m_outputVal = Neuron::transferFunction(sum); // also classed the activation function
 }

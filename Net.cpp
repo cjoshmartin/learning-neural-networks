@@ -13,40 +13,25 @@
 #include <cmath>
 #include "Net.h"
 
-Net::Net(const std::vector<unsigned> &topology) {
-
+Net::Net(const std::vector<unsigned> &topology)
+{
     unsigned numLayers = topology.size();
-
-    // creates a layer
-    for (unsigned layerNum = 0; layerNum < numLayers; ++layerNum)
-    {
+    for (unsigned layerNum = 0; layerNum < numLayers; ++layerNum) {
         m_layers.push_back(Layer());
-        unsigned numOutputs = (layerNum == numLayers ) - 1 ? 0 /*hidden layer */ :  topology[layerNum +1] /* Output layer */; // num of lays depends on if it is a
-                                                                                        // hidden layer or output layer
+        unsigned numOutputs = layerNum == topology.size() - 1 ? 0 : topology[layerNum + 1];
 
-        // We have made a new Layer in our CNN, now we have to fill it with neurons
-        // and add a bias neuron to each layer
+        // We have a new layer, now fill it with neurons, and
+        // add a bias neuron in each layer.
         for (unsigned neuronNum = 0; neuronNum <= topology[layerNum]; ++neuronNum) {
-            m_layers.back().push_back(Neuron(numOutputs,neuronNum));
-            std::cout << "Made a Neuron\n";
+            m_layers.back().push_back(Neuron(numOutputs, neuronNum));
+            std::cout << "Made a Neuron!\n";
         }
-    }
 
-
-    // Forward Propagation
-    for (unsigned layerNum = 1; layerNum < m_layers.size(); ++layerNum)
-    {
-        Layer &prevLayer = m_layers[layerNum-1];
-
-        for (int n = 0; n <m_layers[layerNum].size() - 1 ; ++n)
-        {
-            m_layers[layerNum][n].feedForward(prevLayer); // tells each neuron in each to layer to get busy with the
-                                                // math.
-        }
-        // force the bias node's output value to 1.0. its th last neuron created above
+        // Force the bias node's output to 1.0 (it was the last neuron pushed in this layer):
         m_layers.back().back().setOutputVal(1.0);
     }
 }
+
 
 void Net::feedForward(const std::vector<double> &inputVals) {
 

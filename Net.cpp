@@ -52,43 +52,49 @@ void Net::backProp(const std::vector<double> &targetVals) {
 
     // Calculate overall net error of the Neural Net (RMS or Root Mean Square Error, of the output neuron errors)
     // this is what this algorithm is trying to mimify
+    // Calculate overall net error (RMS of output neuron errors)
+
     Layer &outputLayer = m_layers.back();
     m_error = 0.0;
-    for (unsigned n = 0; n < outputLayer.size() -1 ; ++n)
-    {
 
-        double delta = targetVals[n] - outputLayer[n].getOutputVal(); // RMS
-        m_error+= delta * delta; // RMS
+    for (unsigned n = 0; n < outputLayer.size() - 1; ++n) {
+        double delta = targetVals[n] - outputLayer[n].getOutputVal();
+        m_error += delta * delta;
     }
-    m_error /= outputLayer.size() - 1 ; // RMS
-    m_error = sqrt(m_error);// RMS
+    m_error /= outputLayer.size() - 1; // get average error squared
+    m_error = sqrt(m_error); // RMS
 
     // Implement a recent average measurement
-    m_recentAverageError = (m_recentAverageError * m_recentAverageSmoothingFactor + m_error) /  (m_recentAverageSmoothingFactor + 1.0);
 
-    //Calculate output layer gradients (linear regresstion)
-    for (unsigned n = 0; n <outputLayer.size() - 1 ; ++n) {
+    m_recentAverageError =
+            (m_recentAverageError * m_recentAverageSmoothingFactor + m_error)
+            / (m_recentAverageSmoothingFactor + 1.0);
+
+    // Calculate output layer gradients
+
+    for (unsigned n = 0; n < outputLayer.size() - 1; ++n) {
         outputLayer[n].calcOutputGradients(targetVals[n]);
     }
-    
-    // Calculate gradients on hidden layers
-    for (unsigned layerNum = m_layers.size(); layerNum > 0 ; --layerNum) {
+
+    // Calculate hidden layer gradients
+
+    for (unsigned layerNum = m_layers.size() - 2; layerNum > 0; --layerNum) {
         Layer &hiddenLayer = m_layers[layerNum];
         Layer &nextLayer = m_layers[layerNum + 1];
 
-        // each neuron
         for (unsigned n = 0; n < hiddenLayer.size(); ++n) {
             hiddenLayer[n].calcHiddenGradients(nextLayer);
         }
     }
 
-    // for all layers from outputs to first hidden layer, update connect weights
+    // For all layers from outputs to first hidden layer,
+    // update connection weights
+
     for (unsigned layerNum = m_layers.size() - 1; layerNum > 0; --layerNum) {
         Layer &layer = m_layers[layerNum];
         Layer &prevLayer = m_layers[layerNum - 1];
 
-        //each neuron
-        for (unsigned n = 0; n < layer.size() -1; ++n) {
+        for (unsigned n = 0; n < layer.size() - 1; ++n) {
             layer[n].updateInputWeights(prevLayer);
         }
     }

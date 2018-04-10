@@ -24,6 +24,7 @@ public:
     void feedForward(const std::vector<double> &inputVals);
     void backProp(const std::vector<double> &targetVals);
     void getResults(std::vector<double> &resultVals) const;
+    double getRecentAverageError(void) const { return m_recentAverageError; }
 
 private:
     std::vector<Layer> m_layers; // m_layers[layerNum][neuronNum]

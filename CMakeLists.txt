@@ -3,4 +3,4 @@ project(learning_CNN)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(learning_CNN main.cpp Net.cpp Net.h Neuron.cpp Neuron.h TrainingData.cpp TrainingData.h)
+add_executable(learning_CNN main.cpp Net.cpp Net.h Neuron.cpp Neuron.h TrainingData.cpp TrainingData.h string_formater.cpp string_formater.h)

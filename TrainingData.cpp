@@ -11,6 +11,8 @@
 #include <sstream>
 #include "TrainingData.h"
 #include <vector>
+#include <iostream>
+
 
 using namespace std;
 
@@ -79,4 +81,5 @@ unsigned TrainingData::getTargetOutputs(vector<double> &targetOutputVals)
 
     return targetOutputVals.size();
 }
+
 

@@ -40,8 +40,12 @@ void Neuron::feedForward(const Layer &prevLayer) {
     // include the bias node from the previous layer
 
     for (unsigned n = 0; n < prevLayer.size() ; ++n) {
+       const Neuron testing = prevLayer[n];
 
-       sum += prevLayer[n].getOutputVal() * prevLayer[n].m_outputWeights[m_myIndex].weight;
+        double a = testing.getOutputVal();
+        double b = testing.m_outputWeights[m_myIndex].weight;
+//        int b =0;
+//       sum += a * b;
     }
     m_outputVal = Neuron::transferFunction(sum); // also classed the activation function
 }

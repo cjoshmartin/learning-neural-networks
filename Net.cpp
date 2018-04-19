@@ -13,7 +13,11 @@
 #include <cmath>
 #include "Net.h"
 
-Net::Net(const std::vector<unsigned> &topology)
+using namespace std;
+
+double Net::m_recentAverageSmoothingFactor = 100.0; // Number of training samples to average over
+
+Net::Net(const vector<unsigned> &topology)
 {
     unsigned numLayers = topology.size();
     for (unsigned layerNum = 0; layerNum < numLayers; ++layerNum) {
@@ -24,7 +28,7 @@ Net::Net(const std::vector<unsigned> &topology)
         // add a bias neuron in each layer.
         for (unsigned neuronNum = 0; neuronNum <= topology[layerNum]; ++neuronNum) {
             m_layers.back().push_back(Neuron(numOutputs, neuronNum));
-            std::cout << "Made a Neuron!\n";
+            cout << "Made a Neuron!" << endl;
         }
 
         // Force the bias node's output to 1.0 (it was the last neuron pushed in this layer):
@@ -32,26 +36,35 @@ Net::Net(const std::vector<unsigned> &topology)
     }
 }
 
-
-void Net::feedForward(const std::vector<double> &inputVals) {
-
+void Net::feedForward(const vector<double> &inputVals)
+{
     assert(inputVals.size() == m_layers[0].size() - 1);
 
-    for(unsigned i = 0; i < inputVals.size(); ++i)
-    {
+    // Assign (latch) the input values into the input neurons
+    for (unsigned i = 0; i < inputVals.size(); ++i) {
         m_layers[0][i].setOutputVal(inputVals[i]);
+    }
+
+    // forward propagate
+    for (unsigned layerNum = 1; layerNum < m_layers.size(); ++layerNum) {
+        Layer &prevLayer = m_layers[layerNum - 1];
+        for (unsigned n = 0; n < m_layers[layerNum].size() - 1; ++n) {
+            m_layers[layerNum][n].feedForward(prevLayer);
+        }
     }
 }
 
-void Net::backProp(const std::vector<double> &targetVals) {
-    // this functions will need to:
-        // * Calculate overall net error of the Neural Net (RMS or Root Mean Square Error, of the output neuron errors)
-        // * Calculate output layer gradients
-        // * Calculate gradients on hidden layers
-        // * for all layers from outputs to first hidden layer, update connect weights
+void Net::getResults(vector<double> &resultVals) const
+{
+    resultVals.clear();
 
-    // Calculate overall net error of the Neural Net (RMS or Root Mean Square Error, of the output neuron errors)
-    // this is what this algorithm is trying to mimify
+    for (unsigned n = 0; n < m_layers.back().size() - 1; ++n) {
+        resultVals.push_back(m_layers.back()[n].getOutputVal());
+    }
+}
+
+void Net::backProp(const vector<double> &targetVals)
+{
     // Calculate overall net error (RMS of output neuron errors)
 
     Layer &outputLayer = m_layers.back();
@@ -100,9 +113,4 @@ void Net::backProp(const std::vector<double> &targetVals) {
     }
 }
 
-void Net::getResults(std::vector<double> &resultVals) const {
-   resultVals.clear();
-    for (int n = 0; n < m_layers.back().size() -1 ; ++n) {
-        resultVals.push_back(m_layers.back()[n].getOutputVal());
-    }
-}
+

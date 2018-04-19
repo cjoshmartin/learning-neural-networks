@@ -1,6 +1,17 @@
 cmake_minimum_required(VERSION 3.10)
-project(learning_CNN)
+project(learning_neural_networks)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(learning_CNN main.cpp Net.cpp Net.h Neuron.cpp Neuron.h TrainingData.cpp TrainingData.h string_formater.cpp string_formater.h)
+include_directories(.)
+
+add_executable(learning_neural_networks
+        main.cpp
+        Net.cpp
+        Net.h
+        Neuron.cpp
+        Neuron.h
+        string_formater.cpp
+        string_formater.h
+        TrainingData.cpp
+        TrainingData.h)

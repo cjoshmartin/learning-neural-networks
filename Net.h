@@ -17,8 +17,8 @@
 class Neuron; // forward def.
 typedef std::vector<Neuron> Layer;
 
-class Net {
-
+class Net
+        {
 public:
     Net(const std::vector<unsigned> &topology);
     void feedForward(const std::vector<double> &inputVals);
@@ -29,9 +29,9 @@ public:
 private:
     std::vector<Layer> m_layers; // m_layers[layerNum][neuronNum]
     double m_error;
-    double m_recentAverageSmoothingFactor;
     double m_recentAverageError;
-};
+    static double m_recentAverageSmoothingFactor;
+        };
 
 
 #endif //LEARNING_CNN_NET_H
